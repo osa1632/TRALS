@@ -1,6 +1,4 @@
-# A Sampling Based Method for Tensor Ring
-
-# Decomposition[3]
+# A Sampling Based Method for Tensor Ring Decomposition
 
 ## Osman Asif Malik, Stephen Becker
 
