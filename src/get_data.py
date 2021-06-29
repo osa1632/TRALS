@@ -8,19 +8,18 @@ import imageio
 def get_coil_dataset(dataset_name, obj='100'):
     if obj is None:
         return get_coil_dataset(dataset_name, list(range(1,101)))
-    elif type(obj) is list:
+    elif type(obj) in [list, tuple]:
         return np.concatenate([get_coil_dataset(dataset_name, o) for o in obj],0)
     else:
         tensor_4d = None
 
         for frame_id in range(0,360,5):
-            image = plt.imread(f'{dataset_name}/obj{obj}__{frame_id}.png')[::6,::6,:]
-            image=(image*255).astype('uint8')
-
+            image = plt.imread(f'{dataset_name}/obj{obj}__{frame_id}.png')
+            #image = (image*255).astype('uint8')
             if tensor_4d is None:
-                tensor_4d = image[np.newaxis, :]
+                tensor_4d = image[np.newaxis,:]
             else:
-                tensor_4d = np.concatenate([tensor_4d, image[np.newaxis, :]], 0)
+                tensor_4d = np.concatenate([tensor_4d, image[np.newaxis,:]], 0)
 
         return tensor_4d
 
@@ -41,12 +40,12 @@ def get_data(dataset_name='', obj=None):
         while True:
             try:
                 if video:
-                    image = vid.get_data(frame_id)
+                    image = vid.get_data(frame_id)[::5,::5,:]/255.
 
                 if tensor is None:
                     tensor = image[np.newaxis, :]
                 else:
-                    tensor_4d = np.concatenate([tensor, image[np.newaxis, :]], 0)
+                    tensor = np.concatenate([tensor, image[np.newaxis, :]], 0)
             except IndexError as e:
                 break
             frame_id += 1
